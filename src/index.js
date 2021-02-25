@@ -8,12 +8,9 @@ import '@pnotify/core/dist/PNotify.css';
 import '@pnotify/mobile/dist/PNotifyMobile.css';
 
 
-
 import imgServise from './js/img-service';
 import updateData from './js/updateData'
 import refs from './js/refs';
-
-
 
 
 refs.inputForm.addEventListener('input', debounce(event => checkOfValue(event), 500));
@@ -24,20 +21,24 @@ function checkOfValue(event) {
   refs.ulGallery.innerHTML = '';
   
   if (imgServise.query.length <= 1) {
-    refs.btnLoadMore.classList.add('is-hidden');
+    return;
   } else if (imgServise.query.length === 2) {
+    refs.btnLoadMore.classList.add('is-hidden');
     const myNotice = notice({
       text: 'Please, specify a more precise search word!',
     });
-  } else {
-    imgServise.fetchImages().then(updateData);
-    refs.btnLoadMore.classList.remove('is-hidden');
-  };
+  } else fetchImages();
 }
 
-refs.btnLoadMore.addEventListener('click', () => {
-  imgServise.fetchImages().then(updateData);
-})
+refs.btnLoadMore.addEventListener('click', fetchImages);
+
+function fetchImages() {
+  imgServise
+    .fetchImages()
+    .then(data => updateData(data));
+  
+  refs.btnLoadMore.classList.remove('is-hidden'); 
+}
 
 
 
