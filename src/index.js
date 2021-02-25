@@ -27,17 +27,32 @@ function checkOfValue(event) {
     const myNotice = notice({
       text: 'Please, specify a more precise search word!',
     });
-  } else fetchImages();
+  } else
+    fetchImages();
 }
 
-refs.btnLoadMore.addEventListener('click', fetchImages);
+refs.btnLoadMore.addEventListener('click', () => { 
+   imgServise.fetchImages().then(data => {
+     updateData(data);
+     window.scrollTo({
+       top:
+         document.documentElement.clientHeight +
+         document.documentElement.scrollTop -
+         90,
+       behavior: 'smooth',
+     });
+   });
+});
 
 function fetchImages() {
   imgServise
     .fetchImages()
-    .then(data => updateData(data));
-  
-  refs.btnLoadMore.classList.remove('is-hidden'); 
+    .then(data => {
+      updateData(data);
+    });
+
+  refs.btnLoadMore.classList.remove('is-hidden');
+ 
 }
 
 
